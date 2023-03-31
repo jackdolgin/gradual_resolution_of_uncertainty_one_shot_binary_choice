@@ -12,7 +12,7 @@ browser_exclude_rule = MSIE, mobile, tablet
 allow_repeats = false
 
 [Database Parameters]
-database_url = postgres://tndbqpdhrihrws:b72c468737d94f9f9c3a67fb0d3601a67802073fb06e15bd6bfbb08b5cf89af8@ec2-34-226-11-94.compute-1.amazonaws.com:5432/db4vhlfqp4ss65
+database_url = postgres://pgmupscjlrtrnp:f98ae3e1d9f7f994ab57793f4f806dcc2a26edf062c156f0527ad21bb57a6d8f@ec2-54-208-11-146.compute-1.amazonaws.com:5432/d9fm1hbk0uv7od
 table_name = urwo_participants
 
 [Server Parameters]
