@@ -29,8 +29,8 @@ adserver_revproxy_host = https://urwo.herokuapp.com/
 
 [Task Parameters]
 experiment_code_version = 1.0
-num_conds = 2
-num_counters = 2
+num_conds = 3
+num_counters = 1
 
 [Shell Parameters]
 launch_in_sandbox_mode = true

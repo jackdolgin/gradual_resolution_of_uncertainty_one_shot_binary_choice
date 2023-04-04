@@ -42,7 +42,7 @@ var jsPsychRoulette = (function (jspsych) {
             display_element.innerHTML = `
                 <div class="overlay">
                     <div class="overlay-message">
-                        <p id="overlay-description">To determine how much money you will end up with, we\'re going to start with the $${startingTotal} and spin a ball on a digital roulette wheel on the next screen. Whatever the ball lands on, that many ${dimesOrDollars} will be added to or subtracted from the $${startingTotal}.<p/>
+                        <p id="overlay-description">Terrific. You\'re nearly done. On top of the starting payment of $${startingTotalEnglish}, we are awarding a bonus payment, too. You will start off with $${startingTotalPlusMinPayment} (50 cents more than the starting payment). There are four outcomes in the bonus. You can win 50 cents, win 25 cents, lose 25 cents, or lose 50 cents.<p/>
                         <button id="overlay-button">OK</button>
                     </div>
                     <div id="card-container">
@@ -74,13 +74,13 @@ var jsPsychRoulette = (function (jspsych) {
 
                     <div class="control">
                         <div>
-                            <div id="btnSpin" class="button">Spin</div>
                             <div id="selection-explained"></div>
                             <div class="other-buttons">
-                                <div id="btnb" class="button">Enlarge</div>
-                                <div id="btns" class="button">Shrink</div>
-                                <div id="btnselect" class="button">Reveal</div>
+                                <div id="btnselect" class="button large-button"></div>
+                                <span class="or">OR</span>
+                                <div id="btnselect2" class="button large-button"></div>
                             </div>
+                            <div id="btnSpin" class="button">Spin</div>
                             <div id="btnproceed" class="button">Proceed</div>
                         </div>
                     </div>
@@ -88,9 +88,9 @@ var jsPsychRoulette = (function (jspsych) {
             `
 
             if (omission == "ball"){
-                document.getElementById("selection-explained").innerHTML = "The numbers that are still in play are in red and black. Recalibration is up next, and then you'll find out precisely where the ball landed."
+                document.getElementById("selection-explained").innerHTML = "To find out how much you won, spin the roulette wheel. You will win whichever of the four numbers the ball lands on (determined completely randomly!)"
             } else if (omission == "numbers"){
-                document.getElementById("selection-explained").innerHTML = "The numbers that are no longer in play are in the brown tiles. Recalibration is up next, and then you'll find out precisely which number the ball landed on."
+                document.getElementById("selection-explained").innerHTML = "To find out how much you won, spin the roulette wheel. You will win whichever of the four numbers the ball lands on (determined completely randomly!)"
             }
             
             const plateBGColor = $(".platebg").css("background-color");
@@ -98,8 +98,6 @@ var jsPsychRoulette = (function (jspsych) {
             const blackGradient = getComputedStyle(document.documentElement).getPropertyValue('--black-gradient');
             const whiteColor = getComputedStyle(document.documentElement).getPropertyValue('--white-color');
             const blackColor = getComputedStyle(document.documentElement).getPropertyValue('--black-color');
-            
-            const removeOverlay = () =>  overlay.style.display = 'none';
             
             let overlay = document.querySelector('.overlay');
             let overlayWriting = document.querySelector('#overlay-description');
@@ -110,6 +108,7 @@ var jsPsychRoulette = (function (jspsych) {
             // removeOverlay();
 
             OverlayBtn.addEventListener('click',removeOverlay);
+            OverlayBtn.addEventListener('click',addSpinner);
 
             var numbg = $(".pieContainer");
             var ballbg = $(".ball");
@@ -120,6 +119,17 @@ var jsPsychRoulette = (function (jspsych) {
             var rinner = $("#rcircle");
             var numberLoc = [];
             $.keyframe.debug = true;
+
+            // const removeOverlay = () =>  overlay.style.display = 'none';
+            function removeOverlay() {
+                overlay.style.display = 'none';
+            }
+            function addSpinner(){
+                setTimeout(function() {
+                    console.log("bo")
+                    btnSpin.css("display", "inline-block");
+                    }, 5000);
+            }
             
             createWheel();
             function createWheel() {
@@ -202,18 +212,11 @@ var jsPsychRoulette = (function (jspsych) {
 
             function onSpinPress () {
 
-                spinTo(14);
+                spinTo(winningNum);
                 btnSpin.off('click',onSpinPress);
             }
 
             btnSpin.click(onSpinPress);
-            
-            $("#btnb").click(function() {
-                $(".spinner").css("font-size", "+=.3em");
-            });
-            $("#btns").click(function() {
-                $(".spinner").css("font-size", "-=.3em");
-            });
             
             function resetAni() {
                 let animationPlayState = "animation-play-state";
@@ -252,6 +255,8 @@ var jsPsychRoulette = (function (jspsych) {
                 
                 
                 //get location
+                console.log(numberLoc)
+                console.log(winningNum)
                 var temp = numberLoc[winningNum][0] + 4;
             
                 //randomize
@@ -321,50 +326,53 @@ var jsPsychRoulette = (function (jspsych) {
             }
             
             function finishSpin(rndSpace, winningNum){
-
-                activateHighlighting(winningNum);
-
                 OverlayBtn.removeEventListener('click', removeOverlay);
+                OverlayBtn.removeEventListener('click',addSpinner);
+                document.querySelector('#selection-explained').style.display = 'none';
+                document.querySelector('#btnSpin').style.display = 'none';
 
-                // let surpriseExplanation;
-                // if (omission == "ball"){
-                //     surpriseExplanation = "the ball disappeared during the spin"
-                // } else if (omission == "numbers"){
-                //     surpriseExplanation = "no numbers appeared on the roulette wheel"
-                // }
+                let surpriseExplanation;
+                if (omission == "ball"){
+                    surpriseExplanation = "the ball disappeared during the spin"
+                } else if (omission == "numbers"){
+                    surpriseExplanation = "no numbers appeared on the roulette wheel"
+                }
 
-                // overlayWriting.innerHTML = `As you probably noticed, ${surpriseExplanation}. That was on purpose. We don\'t want to spoil exactly how much you will earn, so that you stay focused during the recalibration.`;
-                // overlay.style.display = 'block';
+                overlayWriting.innerHTML = `As you probably noticed, ${surpriseExplanation}. That was on purpose. You will get to find out precisely which number the ball landed on in a moment. We are first going to do another round of eye-tracking calibration like you did at the start of the experiment.`;
+                overlay.style.display = 'block';
 
-                // OverlayBtn.addEventListener('click', function() {
+                OverlayBtn.addEventListener('click', function() {
 
-                //     if (omission == "ball"){
-                //         lastTwoInstructions();
-                //     } else if (omission == "numbers"){
-                //         overlayWriting.innerHTML = `Numbers ${lowEnd} to ${highEnd} are assigned to each of the ${numorder.length} spaces on the roulette wheel. They are scrambled, so that you don\'t know which number corresponds to which space.`;
-                //         OverlayBtn.addEventListener('click', function() {
-                //             lastTwoInstructions();
-                //         })
-                //     }
+                    angleNumbers(rndSpace);
+                    activateHighlighting(winningNum);
 
-                //     function lastTwoInstructions() {
-                //         overlayWriting.innerHTML = 'But, you can learn some information now. Specifically, you can ask whether any set of numbers on the roulette wheel contain where the ball landed on. We\'ll then tell you whether the ball landed somewhere among that set, which will narrow down the possibilities.'
-                //         OverlayBtn.addEventListener('click', function() {
+
+                    // if (omission == "ball"){
+                    //     lastTwoInstructions();
+                    // } else if (omission == "numbers"){
+                    //     overlayWriting.innerHTML = `Numbers ${lowEnd} to ${highEnd} are assigned to each of the ${numorder.length} spaces on the roulette wheel. They are scrambled, so that you don\'t know which number corresponds to which space.`;
+                    //     OverlayBtn.addEventListener('click', function() {
+                    //         lastTwoInstructions();
+                    //     })
+                    // }
+
+                    // function lastTwoInstructions() {
+                    //     overlayWriting.innerHTML = 'But, you can learn some information now. Specifically, you can ask whether any set of numbers on the roulette wheel contain where the ball landed on. We\'ll then tell you whether the ball landed somewhere among that set, which will narrow down the possibilities.'
+                    //     OverlayBtn.addEventListener('click', function() {
     
-                //             overlayWriting.innerHTML = "To ask, click or drag a set of numbers, which will turn them yellow. When you\'ve selected the numbers you want, click 'Reveal'. You can only ask once."
+                    //         overlayWriting.innerHTML = "To ask, click or drag a set of numbers, which will turn them yellow. When you\'ve selected the numbers you want, click 'Reveal'. You can only ask once."
     
-                //             OverlayBtn.addEventListener('click', function() {
-                                document.querySelector('#btnSpin').style.display = 'none';
-                //                 if (omission == "ball"){
-                //                     angleNumbers(rndSpace);
-                //                     activateHighlighting(winningNum);
-                //                 } else if (omission == "numbers"){
-                //                     selectCard(winningNum);
-                //                 }
-                //             })
-                //         })
-                //     }
-                // })
+                    //         OverlayBtn.addEventListener('click', function() {
+                    //             if (omission == "ball"){
+                    //                 angleNumbers(rndSpace);
+                    //                 activateHighlighting(winningNum);
+                    //             } else if (omission == "numbers"){
+                    //                 selectCard(winningNum);
+                    //             }
+                    //         })
+                    //     })
+                    // }
+                })
 
             }
 
@@ -389,6 +397,8 @@ var jsPsychRoulette = (function (jspsych) {
 
             function assignColors(pieDivv, bool, newBackground=trial.selectedColor, newColor=blackColor){
 
+                console.log(pieDivv)
+
                 let divNum = pieDivv.id.split('hold')[1]
                 let NumDiv = document.getElementById("num" + divNum)
         
@@ -407,9 +417,18 @@ var jsPsychRoulette = (function (jspsych) {
 
             function activateHighlighting(winningNum){
 
+                console.log("jones")
+
                 removeOverlay();
+
+                document.getElementById('selection-explained').innerHTML = "However, right now you can ask about two of the four numbers, and we will tell you whether or not the bonus is one of those two amounts. You will then find out the final number after the re-calibration."
+                document.getElementById('selection-explained').style.display = 'inline-block';
                 
-                document.querySelector('.other-buttons').style.display = "inline-block";           
+                document.querySelector('#btnselect').innerHTML = choiceList[0];
+                document.querySelector('#btnselect2').innerHTML = choiceList[1];
+                document.querySelector('.control').style.width = '500px';
+                document.querySelector('.other-buttons').style.display = "flex";
+
 
                 var down = false;
                 $(document).mousedown(function() {
@@ -455,10 +474,15 @@ var jsPsychRoulette = (function (jspsych) {
                         assignColors(pieDiv, pieDiv.style.background == trial.selectedColor)
                     }  
                 }
-            
-                btnselect.addEventListener('click', () => {
-                    indicateCorrectNumbers(winningNum, mouseMoveListener, mouseDownListener);
-                })
+
+                document.querySelectorAll('.large-button').forEach(div => {
+                    div.addEventListener('click', () => {
+                        console.log("gjsd")
+                        indicateCorrectNumbers(div, winningNum, mouseMoveListener, mouseDownListener);
+                        
+                    });
+                });
+        
             }
 
             function selectCard(winningNum){
@@ -560,82 +584,72 @@ var jsPsychRoulette = (function (jspsych) {
 
             }
 
-            function indicateCorrectNumbers(winningNum, mouseMoveListener=null, mouseDownListener=null){
-                let selectedDivs = []
-                let selectedNumDivs = []
-                let nonSelectedDivs = []
-                let nonSelectedNumDivs = []
-                let selectedNums = []
-            
-                if (omission == "ball"){
-                    $(".pie").map(function() {
-                        if (($(this)[0]).style.background == trial.selectedColor){
-                            selectedDivs.push($(this))
-                            let selectedID = ($(this)[0]).id;
-                            let selectedIDNum = selectedID.split("hold")[1];
-                            let selectedNum = document.getElementById("num" + selectedIDNum).innerHTML;
-                            selectedNums.push(selectedNum);
+            function indicateCorrectNumbers(div, winningNum, mouseMoveListener=null, mouseDownListener=null){
+
+                let choice;
+
+                if (div.innerHTML == "Would you rather know whether you won/lost money (but not how much)"){
+                    choice = "win/lose";
+                } else if (div.innerHTML == "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)"){
+                    choice = "amount";
+                } else if (div.innerHTML == "Would you rather not be told anything"){
+                    choice = "nothing";
+                }
+
+                if (choice == "nothing"){
+                    endTrial(choice, winningNum);
+                } else {
+                    let selectedDivs = []
+                    let selectedNumDivs = []
+                    let nonSelectedDivs = []
+                    let nonSelectedNumDivs = []
+                    let selectedNums = []
+    
+                    numorder.forEach(function (value, i) {
+    
+                        let holdDiv = document.getElementById("hold" + i);
+                        let numDiv = document.getElementById("num" + i);
+    
+                        console.log(holdDiv)
+                        console.log(numDiv)
+                        if ((choice == "win/lose" && [0, 1].includes(i)) || (choice == "amount" && [0, 3].includes(i))){
+                            selectedDivs.push(holdDiv);
+                            selectedNumDivs.push(numDiv);
+                            selectedNums.push(value);
                         } else {
-                            nonSelectedDivs.push($(this))
+                            nonSelectedDivs.push(holdDiv);
                         }
                     });
-                } else if (omission == "numbers"){
-            
-                    $(".card").map(function() {
-                        let possiblePayout = ($(this)[0]).innerHTML;
-                        let displayID = ($(this)[0]).id;
-                        let displayIDNum = displayID.split("d")[1];
-                        let displayIDElsewhere = document.getElementById("hold" + displayIDNum);
-                        let numIDElsewhere = document.getElementById("num" + displayIDNum);
-                
-                        if (($(this)[0]).style.backgroundColor == selectedCardColor){
-                            selectedNums.push(possiblePayout);
-                            selectedDivs.push($(displayIDElsewhere));
-                            selectedNumDivs.push($(numIDElsewhere));
-                        } else {
-                            nonSelectedDivs.push($(displayIDElsewhere));
-                            nonSelectedNumDivs.push($(numIDElsewhere))
-                        }
-                    })
-                }
-            
-            
-                if (selectedDivs.length > 0 && selectedDivs.length < numorder.length){
-            
-                    document.querySelector('#selection-explained').style.display = 'none';
+    
+                    document.querySelector('#selection-explained').style.display = 'block';
                     document.querySelector('#btnproceed').style.display = "inline-block";
                     let numberColor;
+    
+                    spinnerID.removeEventListener('mousemove', mouseMoveListener);
+                    spinnerID.removeEventListener('mousedown', mouseDownListener);
+                    document.querySelector('.other-buttons').style.display = "none";
+                    numberColor = plateBGColor;
                     
-                    if (omission == "ball"){
-                        spinnerID.removeEventListener('mousemove', mouseMoveListener);
-                        spinnerID.removeEventListener('mousedown', mouseDownListener);
-                        document.querySelector('.other-buttons').style.display = "none";
-                        numberColor = plateBGColor;
-                    } else if (omission == "numbers"){
-                        removeOverlay();
-                        numberColor = whiteColor;
-                    }
-            
                     if (selectedNums.includes(winningNum.toString())){
                         selectedDivs.map(x => {
-                            assignColors(x[0], true)
+                            assignColors(x, true)
                         })
                         nonSelectedDivs.map(x => {
-                            assignColors(x[0], false, plateBGColor, numberColor)
+                            assignColors(x, false, plateBGColor, numberColor)
                         })
                         if (omission == "numbers"){
-                            nonSelectedNumDivs.map(x => x[0].style.display = "block");
+                            nonSelectedNumDivs.map(x => x.style.display = "block");
                         }
                     }  else {
             
                         selectedDivs.map(x => {
-                            assignColors(x[0], false, plateBGColor, numberColor)
+                            assignColors(x, false, plateBGColor, numberColor)
                         })
                         nonSelectedDivs.map(x => {
-                            assignColors(x[0], true)
+                            assignColors(x, true)
                         })
                         if (omission == "numbers"){
-                            selectedNumDivs.map(x => x[0].style.display = "block");
+                            selectedNumDivs.map(x => x.style.display = "block");
                         }
                     }
             
@@ -645,11 +659,11 @@ var jsPsychRoulette = (function (jspsych) {
                 }
             }
 
-            function endTrial(selectedNums, winningNum){
+            function endTrial(choice, winningNum){
                 display_element.innerHTML = '<div id="jspsych-content"></div>';
 
                 jsPsych.finishTrial({
-                    selectedNums: selectedNums,
+                    choice: choice,
                     winningNum: winningNum
                 })
             }

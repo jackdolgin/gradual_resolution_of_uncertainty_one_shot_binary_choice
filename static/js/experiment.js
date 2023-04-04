@@ -27,60 +27,22 @@ const jsPsych = initJsPsych({
 /* Define experimental variables */
 /* ************************************ */
 
-const numFrequency = 1;
-const minPayment = 2;
-const expectedMaxExpLength = 10;
-const guaranteedPositive = true;
-let lowEnd, highEnd, startingTotal, winningNumDenom, dimesOrDollars, wheelCondition, omission
-let rotationsTime, wheelSpinTime, ballSpinTime;
+const expectedMaxExpLength = 5;
+const writingTimeLimit = 2;
+const wheelSpinTime = 9;
+const omission = "ball";
+const wheelCondition = "confined_wheel";
+const minPaymentEnglish = "1.50"
+const startingTotalEnglish = "1.50";
+const startingTotal = 1.5;
+const numorder = [-50, -25, 25, 50];
+const startingTotalPlusMinPayment = 2;
 
-const writingTimeLimit = 3;
+const randomIndex = Math.floor(Math.random() * 2);
+const winningNum = numorder[2 + randomIndex];
 
-if (condition == 0){
-  wheelCondition = "vast_wheel";
-} else if (condition == 1){
-  wheelCondition = "confined_wheel";
-}
-
-if (counterbalance == 0){
-  omission = "ball";
-} else if (counterbalance == 1){
-  omission = "numbers";
-}
-
-
-if (wheelCondition == "vast_wheel"){
-  lowEnd = -10;
-  highEnd = 25;
-  winningNumDenom = 10;
-  wheelSpinTime = 4;
-} else if (wheelCondition == "confined_wheel"){
-  lowEnd = -1;
-  highEnd = 4;
-  winningNumDenom = 1;
-  wheelSpinTime = 9;
-}
-
-if (winningNumDenom == 10){
-  dimesOrDollars =  "dimes";
-} else if (winningNumDenom == 1){
-  dimesOrDollars = "dollars";
-}
-
-startingTotal = minPayment - (lowEnd / winningNumDenom);
-
-let numorder;
-let numorderSorted = [];
 let numred = [];
 let numblack = [];
-for (var i = lowEnd; i <= highEnd; i+= numFrequency) {
-  numorderSorted.push(i);
-}
-if (omission == "numbers"){
-  numorder = jsPsych.randomization.shuffle(numorderSorted);
-} else if (omission == "ball"){
-  numorder = numorderSorted
-}
 
 numorder.forEach(function (value, i) {
   if (i % 2 == 0){
@@ -90,15 +52,157 @@ numorder.forEach(function (value, i) {
   }
 });
 
-let numOrderAssignments = [numorderSorted, numorder];
+
+let numOrderAssignments = [numorder, numorder];
+
+let choiceList;
+condition = '1'
 
 
-let winningNum;
-if (guaranteedPositive) {
-  winningNum = Math.floor(Math.random() * highEnd + 0);                    
-} else {
-  winningNum = numorder[Math.floor(Math.random() * numorder.length)];
+if (condition == '0'){
+  choiceList = [
+    'Find out whether the ball either landed on one of these two numbers (25, 50), or on one of these two numbers (-25, -50)',
+    'Find out whether the ball either landed on one of these two numbers (25, -25), or on one of these two numbers (50, -50)'
+    // "Would you rather know whether you won/lost money (but not how much)",
+    // "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)"
+  ]
+} else if (condition == '1'){
+  choiceList = [
+    'Find out whether the ball either landed on one of these two numbers (25, 50), or on one of these two numbers (-25, -50)',
+    'Not be told anything'
+    // "Would you rather know whether you won/lost money (but not how much)",
+    // "Would you rather not be told anything"
+  ]
+} else if (condition == '2'){
+  choiceList = [
+    'Find out whether the ball either landed on one of these two numbers (25, -25), or on one of these two numbers (50, -50)',
+    'Not be told anything'
+    // "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)",
+    // "Would you rather not be told anything"
+  ]
 }
+
+
+// const lowEnd = -10;
+// const highEnd = 25;
+// const winningNumDenom = 10;
+// const wheelSpinTime = 9;
+
+
+// startingTotal = minPayment - (lowEnd / winningNumDenom);
+
+// let numorder;
+// let numorderSorted = [];
+// let numred = [];
+// let numblack = [];
+// for (var i = lowEnd; i <= highEnd; i+= numFrequency) {
+//   numorderSorted.push(i);
+// }
+// if (omission == "numbers"){
+//   numorder = jsPsych.randomization.shuffle(numorderSorted);
+// } else if (omission == "ball"){
+//   numorder = numorderSorted
+// }
+
+// numorder.forEach(function (value, i) {
+//   if (i % 2 == 0){
+//     numred.push(value)
+//   } else{
+//     numblack.push(value)
+//   }
+// });
+
+// let numOrderAssignments = [numorderSorted, numorder];
+
+
+// let winningNum;
+// if (guaranteedPositive) {
+//   winningNum = Math.floor(Math.random() * highEnd + 0);                    
+// } else {
+//   winningNum = numorder[Math.floor(Math.random() * numorder.length)];
+// }
+
+
+
+
+
+
+
+
+
+
+// const numFrequency = 1;
+// const minPayment = 2;
+// const expectedMaxExpLength = 5;
+// const guaranteedPositive = true;
+// let lowEnd, highEnd, startingTotal, winningNumDenom, dimesOrDollars, wheelCondition, omission;
+// let rotationsTime, wheelSpinTime, ballSpinTime;
+
+// const writingTimeLimit = 2;
+
+// if (condition == 0){
+//   wheelCondition = "vast_wheel";
+// } else if (condition == 1){
+//   wheelCondition = "confined_wheel";
+// }
+
+// if (counterbalance == 0){
+//   omission = "ball";
+// } else if (counterbalance == 1){
+//   omission = "numbers";
+// }
+
+
+// if (wheelCondition == "vast_wheel"){
+//   lowEnd = -10;
+//   highEnd = 25;
+//   winningNumDenom = 10;
+//   wheelSpinTime = 4;
+// } else if (wheelCondition == "confined_wheel"){
+//   lowEnd = -1;
+//   highEnd = 4;
+//   winningNumDenom = 1;
+//   wheelSpinTime = 9;
+// }
+
+// if (winningNumDenom == 10){
+//   dimesOrDollars =  "dimes";
+// } else if (winningNumDenom == 1){
+//   dimesOrDollars = "dollars";
+// }
+
+// startingTotal = minPayment - (lowEnd / winningNumDenom);
+
+// let numorder;
+// let numorderSorted = [];
+// let numred = [];
+// let numblack = [];
+// for (var i = lowEnd; i <= highEnd; i+= numFrequency) {
+//   numorderSorted.push(i);
+// }
+// if (omission == "numbers"){
+//   numorder = jsPsych.randomization.shuffle(numorderSorted);
+// } else if (omission == "ball"){
+//   numorder = numorderSorted
+// }
+
+// numorder.forEach(function (value, i) {
+//   if (i % 2 == 0){
+//     numred.push(value)
+//   } else{
+//     numblack.push(value)
+//   }
+// });
+
+// let numOrderAssignments = [numorderSorted, numorder];
+
+
+// let winningNum;
+// if (guaranteedPositive) {
+//   winningNum = Math.floor(Math.random() * highEnd + 0);                    
+// } else {
+//   winningNum = numorder[Math.floor(Math.random() * numorder.length)];
+// }
 
 
 async function initializeExperiment() {
@@ -124,8 +228,7 @@ async function initializeExperiment() {
   let introInstructions = {
     type: jsPsychInstructions,
     pages: [
-    '<p>Hello, and welcome! Our study is interested in introspection and the associated eye correlates. Your task today will be to sit in front of your webcam, get calibrated, write for ' + expectedMaxExpLength + ' minutes in response to an open ended question, get re-calibrated so we know your eye-movements were accurate, and complete a short post-experiment survey.</p>',
-    '<p>You\'ll earn a minimum of $' + minPayment + ' for participating today, since the task isn\'t expected to take longer than ' + expectedMaxExpLength + ' minutes.<br><br>Let\'s first get you calibrated (and don\'t worry, we never access the feed of you, just the x, y coordinates of where your eyes were looking).</p>',
+    `<p>Hello, and welcome! Our study is interested in introspection and the associated eye correlates. It is expected to last ${expectedMaxExpLength} minutes.</p>`,
     ],
     show_clickable_nav: true
   }
@@ -138,7 +241,7 @@ async function initializeExperiment() {
     type: jsPsychHtmlButtonResponse,
     stimulus:
         '<div style="width: 45%; text-align: left; margin: auto;">' +
-        "<p><strong>For a preliminary adjustment, please consider the following instructions: </strong></p>" +
+        "<p><strong>The study will involve eye-tracking. Follow these instructions to maximize the quality of the data: </strong></p>" +
         "<ol>" +
         "<li>Sit at a table and make sure that you could later rest your elbows on it. </li>" +
         "<li>Sit towards a window or lamp so that there are no shadows on your face. " +
@@ -197,10 +300,10 @@ async function initializeExperiment() {
   let writingInstructions = {
     type: jsPsychInstructions,
     pages: [
-    "<p>Great. Now it\'s time for the main task. On the next page write for " + writingTimeLimit + " minutes in response to the prompt, 'What happened in the last month?'. Answer it however you see fit. It is just important that you stay writing for the entire time and stay on task. You can start whenever you\'re ready by advancing to the next screen. The writing screen will then disappear after " + writingTimeLimit + " minutes, automatically advancing you to the end of the study.</p>"
+    `<p>Great. We would like you to write for ${writingTimeLimit} minutes about the past month. It can be personal things or current events. Just try to write as much as you can. Click the button below to begin.</p>`
     ],
     show_clickable_nav: true
-  }
+  } 
 
   let writingTask = {
     type: jsPsychWriting,
@@ -212,7 +315,7 @@ async function initializeExperiment() {
   let preWheelInstructions = {
     type: jsPsychInstructions,
     pages: [
-    '<p>Great. Right now you are projected to earn $' + startingTotal + '. We also need to re-calibrate you once more to validate the data.</p>'
+    '<p>Great. Right now you are projected to earn $' + startingTotalEnglish + '. We also need to re-calibrate you once more to validate the data.</p>'
     ],
     show_clickable_nav: true
   }
@@ -220,7 +323,7 @@ async function initializeExperiment() {
   let learnNow = false;
   let choiceAboutInfo = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: '<p>The $' + startingTotal + ' amount you will earn will be slightly different by the time you finish the calibration. It could be as much as $' + -1 * lowEnd + ' less or $' + highEnd + ' more. Do you want to learn about how much the bonus will be now, or do you want to advance directly to the re-calibration screen?</p>',
+    stimulus: '<p>The $' + startingTotalEnglish + ' amount you will earn will be slightly different by the time you finish the calibration. It could be as much as 50 cents less or 50 cents more. Do you want to learn about how much the bonus will be now, or do you want to advance directly to the re-calibration screen?</p>',
     choices: ['Learn about how much the bonus will be now', 'Advance directly to the re-calibration screen'],
     on_finish: function(data){
         if (data.response == 0){
@@ -281,7 +384,7 @@ async function initializeExperiment() {
       [
         {
           type: 'html',
-            prompt: `Great. Your bonus was $${winningNum / winningNumDenom}, resulting in a grand total earnings of $${startingTotal + (winningNum / winningNumDenom)}. To get paid, please answer a few questions on the next few pages.`
+            prompt: `Great. Your bonus was ${winningNum} cents, resulting in a grand total earnings of $${startingTotal + (winningNum / 100)}. To get paid, please answer a few questions on the next few pages.`
         },
       ],
       [

@@ -135,6 +135,9 @@ p {
 .num {
     position: absolute;
     color: var(--white-color);
+    left: 16em;
+    top: 3.5em;
+    transform: rotate(45deg);
     z-index: 60;
     text-align: center;
     font-family: "Times New Roman", Times, serif;
@@ -149,12 +152,13 @@ p {
 
 .overlay {
     position: absolute;
-    top: 0;
+    top: -40px;
     left: 0;
     width: 100%;
     height: 100%;
     backdrop-filter: blur(10px);
     z-index: 999;
+    padding-top: 100px;
 }
 
 .overlay p {
@@ -424,6 +428,12 @@ p {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=1 );
     /* IE6-8 fallback on horizontal gradient */;
 }
+
+#btnSpin {
+    display: none;
+    float: none;
+}
+
 .button {
     width: 5em;
     height: 3em;
@@ -439,6 +449,33 @@ p {
     border-bottom: solid .1em rgba(0, 0, 0, 1);
 }
 
+.large-button {
+    /* border: ridge; */
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: flex;
+    /* align-self: center; */
+    align-self: inherit;
+    align-items: center;
+    font-size: 16px;
+    margin: 0 20px;
+    cursor: pointer;
+    padding: 15px;
+    border-radius: 5px;
+    line-height: 2em;
+    width: calc(50% - 60px); /* Calculate the button width based on the rectangle width and space between buttons */
+    box-sizing: border-box;
+    white-space: normal;
+    height: auto;
+}
+
+.or {
+    font-size: 24px;
+    font-weight: bold;
+    align-self: center;
+  }
+
 .button:hover, .button:active{
     box-shadow: inset 0 0 .5em #333;
     /* border-bottom: none; */
@@ -452,7 +489,7 @@ p {
     background: none repeat scroll 0% 0% rgba(93, 65, 23, 1)
 }
 
-.other-buttons, #selection-explained, #btnproceed, #card-container {
+.other-buttons, #btnproceed, #card-container {
     display: none;
 }
 
