@@ -106,11 +106,16 @@ if (condition != '3'){
     'highlight',
     'As you were making your choice about which roulette numbers to , did you find it confusing what the button you chose would do, or did you understand that it would leave you with a subset of values that we would subsequently reveal after recalibration?'
   ]
-} else {
+} else if (condition == '0'){
   postQAboutWheelvars = [
     'select',
     'button you chose',
   ] 
+} else {
+  postQAboutWheelvars = [
+    'select',
+    'button on the left',
+  ]
 }
 
 
@@ -517,6 +522,7 @@ async function initializeExperiment() {
   } else {
     timeline = [
       wheelSpin,
+      recalibration_instructions,
     ]
   }
 
