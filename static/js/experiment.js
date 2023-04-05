@@ -27,16 +27,17 @@ const jsPsych = initJsPsych({
 /* Define experimental variables */
 /* ************************************ */
 
-const expectedMaxExpLength = 5;
+const expectedMaxExpLength = 10;
 const writingTimeLimit = 2;
 const wheelSpinTime = 9;
 const omission = "ball";
 const wheelCondition = "confined_wheel";
-const minPaymentEnglish = "1.50"
-const startingTotalEnglish = "1.50";
+const minPaymentEnglish = "2"
+const startingTotalEnglish = "2";
 const startingTotal = 1.5;
 const numorder = [-50, -25, 25, 50];
-const startingTotalPlusMinPayment = 2;
+const startingTotalPlusMinPayment = 2.5;
+const startingTotalPlusMinPaymentEnglish = "2.50";
 
 const randomIndex = Math.floor(Math.random() * 2);
 const winningNum = numorder[2 + randomIndex];
@@ -415,7 +416,7 @@ async function initializeExperiment() {
       [
         {
           type: 'html',
-            prompt: `Great. Your bonus was ${winningNum} cents, resulting in a grand total earnings of $${startingTotal + (winningNum / 100)}. To get paid, please answer a few questions on the next few pages.`
+            prompt: `Great. Your bonus was ${winningNum} cents, resulting in a grand total earnings of $${startingTotalPlusMinPayment + (winningNum / 100)}. To get paid, please answer a few questions on the next few pages.`
         },
       ],
       [
@@ -468,24 +469,24 @@ async function initializeExperiment() {
     ]
   }
 
-  function checkIfSpun(){
-    jsPsych.data.get().filterCustom(function(trial){
-        if (trial.stimulus){
-            return trial.stimulus.startsWith(`<p>The ${startingTotal} amount`)
-        }
-    }).select('response').values[0] == 1;
-  }
+  // function checkIfSpun(){
+  //   jsPsych.data.get().filterCustom(function(trial){
+  //       if (trial.stimulus){
+  //           return trial.stimulus.startsWith(`<p>The ${startingTotal} amount`)
+  //       }
+  //   }).select('response').values[0] == 1;
+  // }
 
-  let if_spun_wheel = {
-    timeline: [postQAboutWheel],
-    conditional_function: function(){
-        if (checkIfSpun) {
-            return true
-        } else {
-            return false
-        }
-    }
-  }
+  // let if_spun_wheel = {
+  //   timeline: [postQAboutWheel],
+  //   conditional_function: function(){
+  //       if (checkIfSpun) {
+  //           return true
+  //       } else {
+  //           return false
+  //       }
+  //   }
+  // }
 
   let exit_fullscreen = {
     type: jsPsychFullscreen,
@@ -510,17 +511,12 @@ async function initializeExperiment() {
     recalibration_instructions,
     recalibration,
     postTaskStarterQs,
-    if_spun_wheel,
+    postQAboutWheel,
     exit_fullscreen
     ]
   } else {
     timeline = [
-      if_node,
-      recalibration_instructions,
-      recalibration,
-      postTaskStarterQs,
-      if_spun_wheel,
-      exit_fullscreen
+      wheelSpin,
     ]
   }
 

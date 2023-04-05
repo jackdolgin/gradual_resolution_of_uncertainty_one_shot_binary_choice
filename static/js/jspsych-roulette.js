@@ -42,7 +42,7 @@ var jsPsychRoulette = (function (jspsych) {
             display_element.innerHTML = `
                 <div class="overlay">
                     <div class="overlay-message">
-                        <p id="overlay-description">Terrific. You\'re nearly done. On top of the baseline payment of $${startingTotalEnglish}, we are awarding a bonus payment, too. You will start off with $${startingTotalPlusMinPayment} (50 cents more than the baseline payment). There are four outcomes in the bonus. You can win 50 cents, win 25 cents, lose 25 cents, or lose 50 cents.<p/>
+                        <p id="overlay-description">Terrific. You\'re nearly done. On top of the baseline payment of $${startingTotalEnglish}, we are awarding a bonus payment, too. You will start off with $${startingTotalPlusMinPaymentEnglish} (50 cents more than the baseline payment). There are four outcomes in the bonus. You can win 50 cents, win 25 cents, lose 25 cents, or lose 50 cents.<p/>
                         <button id="overlay-button">OK</button>
                     </div>
                     <div id="card-container">
