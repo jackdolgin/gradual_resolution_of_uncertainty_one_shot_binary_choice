@@ -56,30 +56,60 @@ numorder.forEach(function (value, i) {
 let numOrderAssignments = [numorder, numorder];
 
 let choiceList;
-condition = '1'
+
+
+
+function getUserInputs() {
+  const input1 = prompt("Please type 'Full Experiment' or 'Shortened Experiment'");
+  const input2 = prompt('Please enter the experiment version, which is either 0, 1, 2, or 3');
+
+  return ([input1, input2]);
+}
+
+let userInputs = getUserInputs();
+
+let expLength = userInputs[0];
+condition = userInputs[1];
+
+// condition = '3'
 
 
 if (condition == '0'){
   choiceList = [
-    'Find out whether the ball either landed on one of these two numbers (25, 50), or on one of these two numbers (-25, -50)',
-    'Find out whether the ball either landed on one of these two numbers (25, -25), or on one of these two numbers (50, -50)'
+    'Find out whether the ball either landed on one of these two numbers (25, 50), or whether it landed on one of these two numbers (-25, -50)',
+    'Find out whether the ball either landed on one of these two numbers (25, -25), or whether it landed on one of these two numbers (50, -50)'
     // "Would you rather know whether you won/lost money (but not how much)",
     // "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)"
   ]
 } else if (condition == '1'){
   choiceList = [
-    'Find out whether the ball either landed on one of these two numbers (25, 50), or on one of these two numbers (-25, -50)',
-    'Not be told anything'
+    'Find out whether the ball either landed on one of these two numbers (25, 50), or whether it landed on one of these two numbers (-25, -50)',
+    'Not be told anything until after re-calibration'
     // "Would you rather know whether you won/lost money (but not how much)",
     // "Would you rather not be told anything"
   ]
 } else if (condition == '2'){
   choiceList = [
-    'Find out whether the ball either landed on one of these two numbers (25, -25), or on one of these two numbers (50, -50)',
-    'Not be told anything'
+    'Find out whether the ball either landed on one of these two numbers (25, -25), or whether it landed on one of these two numbers (50, -50)',
+    'Not be told anything until after re-calibration'
     // "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)",
     // "Would you rather not be told anything"
   ]
+}
+
+let postQAboutWheelvars;
+
+if (condition != '3'){
+   postQAboutWheelvars = [
+    'highlight',
+    'highlight',
+    'As you were making your choice about which roulette numbers to , did you find it confusing what the button you chose would do, or did you understand that it would leave you with a subset of values that we would subsequently reveal after recalibration?'
+  ]
+} else {
+  postQAboutWheelvars = [
+    'select',
+    'button you chose',
+  ] 
 }
 
 
@@ -241,7 +271,7 @@ async function initializeExperiment() {
     type: jsPsychHtmlButtonResponse,
     stimulus:
         '<div style="width: 45%; text-align: left; margin: auto;">' +
-        "<p><strong>The study will involve eye-tracking. Follow these instructions to maximize the quality of the data: </strong></p>" +
+        "<p><strong>For a preliminary adjustment, please consider the following instructions: </strong></p>" +
         "<ol>" +
         "<li>Sit at a table and make sure that you could later rest your elbows on it. </li>" +
         "<li>Sit towards a window or lamp so that there are no shadows on your face. " +
@@ -312,42 +342,43 @@ async function initializeExperiment() {
     timing_response: writingTimeLimit * 60000
   }
 
-  let preWheelInstructions = {
-    type: jsPsychInstructions,
-    pages: [
-    '<p>Great. Right now you are projected to earn $' + startingTotalEnglish + '. We also need to re-calibrate you once more to validate the data.</p>'
-    ],
-    show_clickable_nav: true
-  }
+  // let preWheelInstructions = {
+  //   type: jsPsychInstructions,
+  //   pages: [
+  //   '<p>Great. Right now you are projected to earn $' + startingTotalEnglish + '. We also need to re-calibrate you once more to validate the data.</p>'
+  //   ],
+  //   show_clickable_nav: true
+  // }
 
-  let learnNow = false;
-  let choiceAboutInfo = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus: '<p>The $' + startingTotalEnglish + ' amount you will earn will be slightly different by the time you finish the calibration. It could be as much as 50 cents less or 50 cents more. Do you want to learn about how much the bonus will be now, or do you want to advance directly to the re-calibration screen?</p>',
-    choices: ['Learn about how much the bonus will be now', 'Advance directly to the re-calibration screen'],
-    on_finish: function(data){
-        if (data.response == 0){
-            learnNow = true;
-        }
-    }
-  }
+  // let learnNow = false;
+  // let choiceAboutInfo = {
+  //   type: jsPsychHtmlButtonResponse,
+  //   stimulus: '<p>The $' + startingTotalEnglish + ' amount you will earn will be slightly different by the time you finish the calibration. It could be as much as 50 cents less or 50 cents more. Do you want to learn about how much the bonus will be now, or do you want to advance directly to the re-calibration screen?</p>',
+  //   choices: ['Learn about how much the bonus will be now', 'Advance directly to the re-calibration screen'],
+  //   on_finish: function(data){
+  //       if (data.response == 0){
+  //           learnNow = true;
+  //       }
+  //   }
+  // }
 
+  
   let wheelSpin = {
     type: jsPsychRoulette,
     // numbersFacing: "upright",
     wheelSpinTime: wheelSpinTime,
   }
 
-  let if_node = {
-    timeline: [wheelSpin],
-    conditional_function: function(){
-        // if (learnNow) {
-            return true
-        // } else {
-            // return false
-        // }
-    }
-  }
+  // let if_node = {
+  //   timeline: [wheelSpin],
+  //   conditional_function: function(){
+  //       // if (learnNow) {
+  //           return true
+  //       // } else {
+  //           // return false
+  //       // }
+  //   }
+  // }
 
   let recalibration_instructions = {
     type: jsPsychHtmlButtonResponse,
@@ -419,7 +450,7 @@ async function initializeExperiment() {
 
             {
                 type: 'text',
-                prompt: 'As you were making your choice about which numbers to highlight, did you find it confusing what the highlighting would do, or did you understand that it would leave you with a subset of values that we would subsequently reveal after recalibration?',
+                prompt: `As you were making your choice about which roulette numbers to ${postQAboutWheelvars[0]}, did you find it confusing what the ${postQAboutWheelvars[1]} would do, or did you understand that it would leave you with a subset of values that we would subsequently reveal after recalibration?`,
                 required: true,
                 textbox_rows: 2,
                 textbow_columns: 25,
@@ -428,7 +459,7 @@ async function initializeExperiment() {
         [
             {
                 type: 'text',
-                prompt: 'How did you make your choice about the numbers you highlighted? Did you think at all about it, or did you choose hastily without any thought? (Your answer won\'t affect your payment or HIT rating. It\'s for us to better understand the data.)',
+                prompt: `How did you make your choice about the roulette numbers you ${postQAboutWheelvars[0]}? Did you think at all about it, or did you choose hastily without any thought? (Your answer won\'t affect your payment or HIT rating. It\'s for us to better understand the data.)`,
                 required: true,
                 textbox_rows: 2,
                 textbow_columns: 25,
@@ -462,27 +493,57 @@ async function initializeExperiment() {
     delay_after: 0
   }
 
+  let timeline;
 
-  /* create timeline */
-  var timeline = [
-    // inclusionCheck,
-    // introInstructions,
-    // initEyeTracking,
-    // instruct_eyeTracking_light,
-    // enter_fullscreen,
-    // calibration_instructions,
-    // calibration,
-    // writingInstructions,
-    // writingTask,
-    // preWheelInstructions,
-    // choiceAboutInfo,
-    if_node,
+  if (expLength == 'Full Experiment'){
+    timeline = [
+    inclusionCheck,
+    introInstructions,
+    initEyeTracking,
+    instruct_eyeTracking_light,
+    enter_fullscreen,
+    calibration_instructions,
+    calibration,
+    writingInstructions,
+    writingTask,
+    wheelSpin,
     recalibration_instructions,
     recalibration,
     postTaskStarterQs,
     if_spun_wheel,
     exit_fullscreen
-  ]
+    ]
+  } else {
+    timeline = [
+      if_node,
+      recalibration_instructions,
+      recalibration,
+      postTaskStarterQs,
+      if_spun_wheel,
+      exit_fullscreen
+    ]
+  }
+
+  // /* create timeline */
+  // timeline = [
+  //   // inclusionCheck,
+  //   // introInstructions,
+  //   // initEyeTracking,
+  //   // instruct_eyeTracking_light,
+  //   // enter_fullscreen,
+  //   // calibration_instructions,
+  //   // calibration,
+  //   // writingInstructions,
+  //   // writingTask,
+  //   // preWheelInstructions,
+  //   // choiceAboutInfo,
+  //   if_node,
+  //   recalibration_instructions,
+  //   recalibration,
+  //   postTaskStarterQs,
+  //   if_spun_wheel,
+  //   exit_fullscreen
+  // ]
 
   /* start the experiment */
   return jsPsych.run(timeline);

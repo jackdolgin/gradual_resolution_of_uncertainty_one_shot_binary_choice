@@ -434,6 +434,10 @@ p {
     float: none;
 }
 
+#div-inside-control {
+    display: contents;
+}
+
 .button {
     width: 5em;
     height: 3em;
@@ -502,8 +506,8 @@ p {
 }
 
 li {
-    height: 200px;
-    border: 2px solid tomato;
+    /* height: 200px;
+    border: 2px solid tomato; */
 }
 
 li.hover {
@@ -524,11 +528,11 @@ ul {
 }
     
 li {
-    display: inline-block;
+    /* display: inline-block;
     border: 1px solid black;
-    padding: 20px;
+    padding: 20px; */
     /* margin-right: 10px; */
-    width: 100px;
+    /* width: 100px;
     height: 200px;
     line-height: 180px;
     font-size: 40px;
@@ -542,7 +546,7 @@ li {
     -moz-user-select:none;
     -ms-user-select:none;
     -o-user-select:none;
-    user-select:none;
+    user-select:none; */
 }
 
 #bar-container {
