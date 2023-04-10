@@ -12,6 +12,14 @@ html {
     height: 100%;
 }
 
+/* #jspsych-content {
+    width: 60%;
+} */
+
+.sv_main.sv_default_css .sv_container {
+    color: black;
+}
+
 textarea {
     font-weight: normal;
     font-size: 1em;
