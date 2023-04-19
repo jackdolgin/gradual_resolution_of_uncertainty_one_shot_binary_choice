@@ -81,8 +81,8 @@ if (condition == '0'){
     // 'Find out whether the ball either landed on one of these two numbers (25, -25), or whether it landed on one of these two numbers (50, -50)'
     // "Would you rather know whether you won/lost money (but not how much)",
     // "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)"
-    "Be told now—before re-calibration—whether you won/lost money (but not how much)",
-    "Be told now—before re-calibration—whether the amount you won/lost was 50 cents (but not whether you won/lost money)"
+    "Be told whether you won/lost money (but not how much)",
+    "Be told whether the amount you won/lost was 50 cents (but not whether you won/lost money)"
 
   ]
 } else if (condition == '1'){
@@ -91,7 +91,7 @@ if (condition == '0'){
     // 'Not be told anything until after re-calibration'
     // "Would you rather know whether you won/lost money (but not how much)",
     // "Would you rather not be told anything"
-    "Be told now—before re-calibration—whether you won/lost money (but not how much)",
+    "Be told whether you won/lost money (but not how much)",
     "Not be told anything until after re-calibration"
   ]
 } else if (condition == '2'){
@@ -100,7 +100,7 @@ if (condition == '0'){
     // 'Not be told anything until after re-calibration'
     // "Whether the amount you won/lost was 50 cents (but not whether you won/lost money)",
     // "Would you rather not be told anything"
-    "Be told now—before re-calibration—whether the amount you won/lost was 50 cents (but not whether you won/lost money)",
+    "Be told whether the amount you won/lost was 50 cents (but not whether you won/lost money)",
     "Not be told anything until after re-calibration"
 
   ]
@@ -369,20 +369,23 @@ async function initializeExperiment() {
       [
         {
           type: 'html',
-            prompt: `Terrific. You\'re nearly done. Right now you are projected to earn $${startingTotalPlusMinPaymentEnglish}. We also need to do another round of eye-tracking calibration, like you did at the start of the experiment, to validate the data.`
+            prompt: `Terrific. You\'re nearly done. To validate the eye-tracking data, We are going to do a second round of eye-tracking calibration, which will again consist of clicking dots on the screen.`
         },
       ],
       [
         {
           type: 'html',
-            prompt: `By the time you finish the re-calibration, the amount you will earn will be slightly different than $${startingTotalPlusMinPaymentEnglish}. It will either be 50 cents less, 25 cents less, 25 cents more, or 50 cents more than $${startingTotalPlusMinPaymentEnglish}. Each of these four bonuses is equally likely.`
+            prompt: `You will find out after the re-calibration exactly how much money you earned for participating in today\'s experiment. We are giving you $${startingTotalPlusMinPaymentEnglish} to start, but there is also a bonus that will be tacked on. That bonus has an equal chance of being each of these four amounts: -50 cents, -25 cents, +25 cents, or +50 cents.`
+            // `Just now we randomly picked one of these four bonuses. Even though you will find out after the dot clicking exactly how much the bonus is, we can tell you before re-calibration about two of numbers that definitely are not the bonus.`
+            // `By the time you finish the re-calibration, the amount you will earn will be slightly different than $${startingTotalPlusMinPaymentEnglish}. It will either be 50 cents less, 25 cents less, 25 cents more, or 50 cents more than $${startingTotalPlusMinPaymentEnglish}. Each of these four bonuses is equally likely.`
         },
       ],
       [
             {
                 type: 'multi-choice',
                 name: 'bonusChoice',
-                prompt: `Great. We just randomly generated the bonus. You are about to do the minute-long re-calibration, and afterwards we will tell you the amount of the bonus. In the meantime, you can learn partial information about the bonus. Select one of the following options (your choice doesn\'t affect the bonus, since the bonus is already generated).`,
+                // prompt: `Great. We just randomly generated the bonus. You are about to do the minute-long re-calibration, and afterwards we will tell you the amount of the bonus. In the meantime, you can learn partial information about the bonus. Select one of the following options (your choice doesn\'t affect the bonus, since the bonus is already generated).`,
+                prompt: `Just now we randomly picked one of these four bonuses (-50, -25, 25 or 50). Even though you will find out after the dot clicking exactly how much the bonus is, we can tell you before re-calibration about two of numbers that definitely are not the bonus. Choose to:`,
                 options: choiceList,
                 required: true,
             },
